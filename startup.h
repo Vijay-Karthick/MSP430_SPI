@@ -49,7 +49,7 @@
 #define MIN_REFRESH_VALUE		(2)
 
 /* Defines for the GPIO */
-#define PORT1_PIN0_LED1			(0b00000001)
+#define PORT1_PIN0_SPI			(0b00000001)
 #define PORT1_PIN1_MISO			(0b00000010)
 #define PORT1_PIN2_MOSI			(0b00000100)
 #define PORT1_PIN3_SWITCH2		(0b00001000)
@@ -80,7 +80,7 @@
 #define PORT2_INPUT_LOW(pinNumber)			{P2IN &= ~pinNumber;}
 #define PORT2_INPUT_HIGH(pinNumber)			{P2IN |= pinNumber;}
 
-/*Defines for output */
+/* Defines for output */
 #define PORT1_OUTPUT_LOW(pinNumber)			{P1OUT &= ~pinNumber;}
 #define PORT1_OUTPUT_HIGH(pinNumber)		{P1OUT |= pinNumber;}
 #define PORT2_OUTPUT_LOW(pinNumber)			{P2OUT &= ~pinNumber;}
@@ -92,11 +92,41 @@
 #define PORT2_DIR_INPUT(pinNumber)			{P2DIR &= ~pinNumber;}
 #define PORT2_DIR_OUTPUT(pinNumber)			{P2DIR |= pinNumber;}
 
-/*Defines for push pull register enable */
+/* Defines for push pull register enable */
 #define PORT1_PULL_DOWN(pinNumber)			{P1REN &= ~pinNumber;}
 #define PORT1_PULL_UP(pinNumber)			{P1REN |= pinNumber;}
 #define PORT2_PULL_DOWN(pinNumber)			{P2REN &= ~pinNumber;}
 #define PORT2_PULL_UP(pinNumber)			{P2REN |= pinNumber;}
+
+/* Defines for the SPI */
+/* Defines for UCA0CTL0 */
+#define CLOCK_PHASE_CAPTURE_FIRST_EDGE		(UCCKPH)
+#define CLOCK_POLARITY_INACTIVE_ST_HIGH		(UCCKPL)
+#define MSB_FIRST							(UCMSB)
+#define DATA_7BIT							(UC7BIT)
+#define MASTER_MODE_ENABLE					(UCMST)
+#define SPI_MODE_ENABLE						(UCMODE_0)
+#define SYNCH_MODE_ENABLE					(UCSYNC)
+/* Defines for UCA0CTL1 */
+#define SPI_CLOCK_SRC_ACLK					(0x00)
+#define SPI_CLOCK_SRC_SMCLK					(UCSSEL1|UCSSEL0)
+#define SOFTWARE_RESET_ENABLE				(UCSWRST)
+/* Defines for UCA0STAT */
+#define LOOP_BACK_TEST_ENABLE				(UCLISTEN)
+#define FRAMING_ERROR_OCCURRED				(UCFE)
+#define OVERFLOW_ERROR_OCCURRED				(UCOE)
+#define DATA_TRANSFER_IN_PROGRESS			(UCBUSY)
+/* Define for 8 bit receive buffer */
+#define RECEIVE_BUFFER						(UCA0RXBUF)
+/* Define for 8 bit transmit buffer */
+#define TRANSMIT_BUFFER						(UCA0TXBUF)
+/* @TODO: Move the interrupts to the interrupt section */
+/* Defines for IE2 */
+#define TRANSMIT_INTERRUPT_ENABLE			(UCA0TXIE)
+#define RECEIVE_INTERRUPT_ENABLE			(UCA0RXIE)
+/* Defines for IFG2 */
+#define TRANSMIT_INTERRUPT_PENDING			(UCA0TXIFG)
+#define RECEIVE_INTERRUPT_PENDING			(UCA0RXIFG)
 
 /*
  *------------------------------------------------------------------------------
@@ -147,5 +177,6 @@ void init_wdog();
 void reset_wdog();
 void gpio_init();
 void delay_ms(int ms);
+void spi_init();
 
 #endif /* STARTUP_H_ */

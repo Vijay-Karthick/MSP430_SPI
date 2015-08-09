@@ -126,10 +126,15 @@ void reset_wdog() {
 
 void gpio_init() {
 	/* Settings for port 1 I/O */
-	/* Pin 0 is LED1 */
-	PORT1_GPIO_MODE(PORT1_PIN0_LED1);
-	PORT1_OUTPUT_LOW(PORT1_PIN0_LED1);
-	PORT1_DIR_OUTPUT(PORT1_PIN0_LED1);
+	/* Pin 0 is SCK */
+	PORT1_PRIMARY_FUNCTION(PORT1_PIN0_SPI);
+	PORT1_DIR_OUTPUT(PORT1_PIN0_SPI);
+	/* Pin 1 is MISO */
+	PORT1_PRIMARY_FUNCTION(PORT1_PIN1_MISO);
+	PORT1_DIR_INPUT(PORT1_PIN1_MISO);
+	/* Pin 2 is MOSI */
+	PORT1_PRIMARY_FUNCTION(PORT1_PIN0_SPI);
+	PORT1_DIR_OUTPUT(PORT1_PIN0_SPI);
 }
 
 void delay_ms(int ms) {
@@ -154,4 +159,21 @@ void delay_ms(int ms) {
 			}
 		}
 	}
+}
+
+void spi_init() {
+	/* Configure the UCA0CTL0 register */
+	UCA0CTL0 = SPI_MODE_ENABLE;
+	UCA0CTL0 &= ~CLOCK_PHASE_CAPTURE_FIRST_EDGE;	//Data is changed on the first UCLK edge and captured on the following edge.
+	UCA0CTL0 &= ~CLOCK_POLARITY_INACTIVE_ST_HIGH;	//The inactive state is low.
+	UCA0CTL0 |= MSB_FIRST | DATA_7BIT | MASTER_MODE_ENABLE | SYNCH_MODE_ENABLE;
+
+	/* Configure the UCA0CTL1 register */
+	UCA0CTL1 = SPI_CLOCK_SRC_SMCLK | SOFTWARE_RESET_ENABLE;
+
+	/* Configure the IE2 register */
+	IE2 = TRANSMIT_INTERRUPT_ENABLE | RECEIVE_INTERRUPT_ENABLE;
+
+	/* Configure the IFG2 register */
+	IFG2 = TRANSMIT_INTERRUPT_PENDING | RECEIVE_INTERRUPT_PENDING;
 }

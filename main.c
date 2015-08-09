@@ -83,6 +83,9 @@ void main(void) {
 	/* Initialize the GPIO */
 	gpio_init();
 
+	/* Initialize the SPI */
+	spi_init();
+
 	/* Enable the WDOG */
 	enable_watchdog();
 
@@ -91,10 +94,8 @@ void main(void) {
 		/* Reset WDOG timer to prevent resetting the CPU */
 		reset_wdog();
 
-		/* Test code to blink the LED1 */
-		PORT1_OUTPUT_HIGH(PORT1_PIN0_LED1);
-		delay_ms(900);
-		PORT1_OUTPUT_LOW(PORT1_PIN0_LED1);
-		delay_ms(900);
+		/* Test transmit */
+		while (UCA0STAT & DATA_TRANSFER_IN_PROGRESS);
+		TRANSMIT_BUFFER = 0xAB;
 	}
 }
