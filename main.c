@@ -1,9 +1,30 @@
-/**
- * File: main.c
- * Description: Main entry point.
- * Author: Vijay Karthick Baskar.
- * License: Assume BSD type license and feel free to use this code.
- *			Sending me a thank you mail will do!
+/*
+ * Copyright (c) <2015>, <Vijay Karthick Baskar>
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * The views and conclusions contained in the software and documentation are those
+ * of the authors and should not be interpreted as representing official policies,
+ * either expressed or implied, of the FreeBSD Project.
  */
 
 /*
@@ -44,8 +65,6 @@
  *------------------------------------------------------------------------------
  */
 
-volatile unsigned int i;
-
 /*
  *------------------------------------------------------------------------------
  * Public Constants
@@ -83,6 +102,9 @@ void main(void) {
 	/* Initialize the GPIO */
 	gpio_init();
 
+	/* Initialize the SPI */
+	spi_init();
+
 	/* Enable the WDOG */
 	enable_watchdog();
 
@@ -91,10 +113,8 @@ void main(void) {
 		/* Reset WDOG timer to prevent resetting the CPU */
 		reset_wdog();
 
-		/* Test code to blink the LED1 */
-		PORT1_OUTPUT_HIGH(PORT1_PIN0_LED1);
-		delay_ms(900);
-		PORT1_OUTPUT_LOW(PORT1_PIN0_LED1);
-		delay_ms(900);
+		/* Test transmit */
+		spi_test_method1();
+//		spi_test_method2();
 	}
 }
